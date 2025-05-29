@@ -3,13 +3,22 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
+    public GameObject cam;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
     }
 
-    
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (IsLocalPlayer)
+        {
+            cam.SetActive(true);
+        }
+    }
+
     public void Update()
     {
         // Local only. Not networked
@@ -20,21 +29,21 @@ public class Player : NetworkBehaviour
                 GetBigOrDieTrying_RequestToServer_Rpc();
             }
 
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKey(KeyCode.A))
             {
-                MoveX_Request_Rpc(-1);
+                MoveX_Request_Rpc(-0.1f);
             }
-            if (Input.GetKeyDown(KeyCode.D))
+            if (Input.GetKey(KeyCode.D))
             {
-                MoveX_Request_Rpc(1);
+                MoveX_Request_Rpc(0.1f);
             }
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKey(KeyCode.W))
             {
-                MoveX_Request_Rpc(0,1);
+                MoveX_Request_Rpc(0,0.1f);
             }
-            if (Input.GetKeyDown(KeyCode.S))
+            if (Input.GetKey(KeyCode.S))
             {
-                MoveX_Request_Rpc(0,-1);
+                MoveX_Request_Rpc(0,-0.1f);
             }
         }
     }
@@ -58,15 +67,15 @@ public class Player : NetworkBehaviour
     //MOVE
 
     [Rpc(SendTo.Server, RequireOwnership = false)]
-    void MoveX_Request_Rpc(int dirX=0, int dirY=0)
+    void MoveX_Request_Rpc(float dirX=0, float dirZ=0)
     {
-        MoveLeft_ServerResponse_Rpc(dirX, dirY);
+        MoveLeft_ServerResponse_Rpc(dirX, dirZ);
     }
 
     [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
-    void MoveLeft_ServerResponse_Rpc(int dirX=0, int dirY=0)
+    void MoveLeft_ServerResponse_Rpc(float dirX=0, float dirZ=0)
     {
-        transform.position += transform.right * dirX + transform.up * dirY;
+        transform.position += transform.right * dirX + transform.forward * dirZ;
     }
 
 }
