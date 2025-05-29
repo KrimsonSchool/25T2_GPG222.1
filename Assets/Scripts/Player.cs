@@ -4,6 +4,8 @@ using UnityEngine;
 public class Player : NetworkBehaviour
 {
     public GameObject cam;
+
+    public float rotSpeed;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,6 +18,8 @@ public class Player : NetworkBehaviour
         if (IsLocalPlayer)
         {
             cam.SetActive(true);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 
@@ -45,6 +49,8 @@ public class Player : NetworkBehaviour
             {
                 MoveX_Request_Rpc(0,-0.1f);
             }
+            
+            Rotate_Request_Rpc(Input.GetAxis("Mouse X"));
         }
     }
     
@@ -76,6 +82,19 @@ public class Player : NetworkBehaviour
     void MoveLeft_ServerResponse_Rpc(float dirX=0, float dirZ=0)
     {
         transform.position += transform.right * dirX + transform.forward * dirZ;
+    }
+    
+    //ROTATE
+    [Rpc(SendTo.Server, RequireOwnership = false)]
+    void Rotate_Request_Rpc(float rot=0)
+    {
+        Rotate_ServerResponse_Rpc(rot);
+    }
+
+    [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
+    void Rotate_ServerResponse_Rpc(float rot=0)
+    {
+        transform.Rotate(0, rot * Time.deltaTime * rotSpeed, 0);
     }
 
 }
