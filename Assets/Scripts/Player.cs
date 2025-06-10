@@ -5,6 +5,7 @@ public class Player : NetworkBehaviour
 {
     public GameObject cam;
 
+    public float speed;
     public float rotSpeed;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -32,7 +33,10 @@ public class Player : NetworkBehaviour
             {
                 GetBigOrDieTrying_RequestToServer_Rpc();
             }
+            
+            transform.position += transform.forward * Time.deltaTime * speed * Input.GetAxis("Vertical");
 
+            /*
             if (Input.GetKey(KeyCode.A))
             {
                 MoveX_Request_Rpc(-0.1f);
@@ -48,7 +52,7 @@ public class Player : NetworkBehaviour
             if (Input.GetKey(KeyCode.S))
             {
                 MoveX_Request_Rpc(0,-0.1f);
-            }
+            }*/
             
             Rotate_Request_Rpc(Input.GetAxis("Mouse X"));
         }
@@ -72,6 +76,7 @@ public class Player : NetworkBehaviour
 
     //MOVE
 
+    /*
     [Rpc(SendTo.Server, RequireOwnership = false)]
     void MoveX_Request_Rpc(float dirX=0, float dirZ=0)
     {
@@ -83,7 +88,7 @@ public class Player : NetworkBehaviour
     {
         transform.position += transform.right * dirX + transform.forward * dirZ;
     }
-    
+     */
     //ROTATE
     [Rpc(SendTo.Server, RequireOwnership = false)]
     void Rotate_Request_Rpc(float rot=0)
@@ -94,7 +99,9 @@ public class Player : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
     void Rotate_ServerResponse_Rpc(float rot=0)
     {
-        transform.Rotate(0, rot * Time.deltaTime * rotSpeed, 0);
+        //transform.Rotate(0, rot * Time.deltaTime * rotSpeed, 0);
+        transform.rotation *= Quaternion.Euler(0, rot * Time.deltaTime * rotSpeed, 0);
     }
+   
 
 }
