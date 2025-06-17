@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,10 +8,12 @@ public class Player : NetworkBehaviour
 
     public float speed;
     public float rotSpeed;
+
+    public int health;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
     }
 
     public override void OnNetworkSpawn()
@@ -18,9 +21,16 @@ public class Player : NetworkBehaviour
         base.OnNetworkSpawn();
         if (IsLocalPlayer)
         {
+            print("MY ID: " + this.NetworkObjectId);
+
             cam.SetActive(true);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+        }
+
+        if (IsHost)
+        {
+            gameObject.AddComponent<Host>();
         }
     }
 
@@ -29,79 +39,76 @@ public class Player : NetworkBehaviour
         // Local only. Not networked
         if (IsLocalPlayer)
         {
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                GetBigOrDieTrying_RequestToServer_Rpc();
-            }
-            
-            transform.position += transform.forward * Time.deltaTime * speed * Input.GetAxis("Vertical");
+            transform.position += transform.forward * Time.deltaTime * speed * Input.GetAxis("Vertical") +
+                                  transform.right * Time.deltaTime * speed * Input.GetAxis("Horizontal");
 
-            /*
-            if (Input.GetKey(KeyCode.A))
-            {
-                MoveX_Request_Rpc(-0.1f);
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                MoveX_Request_Rpc(0.1f);
-            }
-            if (Input.GetKey(KeyCode.W))
-            {
-                MoveX_Request_Rpc(0,0.1f);
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                MoveX_Request_Rpc(0,-0.1f);
-            }*/
-            
             Rotate_Request_Rpc(Input.GetAxis("Mouse X"));
         }
     }
-    
-    [Rpc(SendTo.Server, RequireOwnership = false)]
-    private void GetBigOrDieTrying_RequestToServer_Rpc()
-    {
-        // Check if it's legal/not cheating
-        GetBigOrDieTrying_ServerToClients_Rpc();
-    }
 
-
-// Function that runs from the Server TO ALL clients
-    [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
-    private void GetBigOrDieTrying_ServerToClients_Rpc()
-    {
-        // This is bugged
-        transform.localScale = transform.localScale + new Vector3(1.25f, 1.25f, 1.25f);
-    }
-
-    //MOVE
-
-    /*
-    [Rpc(SendTo.Server, RequireOwnership = false)]
-    void MoveX_Request_Rpc(float dirX=0, float dirZ=0)
-    {
-        MoveLeft_ServerResponse_Rpc(dirX, dirZ);
-    }
-
-    [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
-    void MoveLeft_ServerResponse_Rpc(float dirX=0, float dirZ=0)
-    {
-        transform.position += transform.right * dirX + transform.forward * dirZ;
-    }
-     */
     //ROTATE
     [Rpc(SendTo.Server, RequireOwnership = false)]
-    void Rotate_Request_Rpc(float rot=0)
+    void Rotate_Request_Rpc(float rot = 0)
     {
         Rotate_ServerResponse_Rpc(rot);
     }
 
     [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
-    void Rotate_ServerResponse_Rpc(float rot=0)
+    void Rotate_ServerResponse_Rpc(float rot = 0)
     {
         //transform.Rotate(0, rot * Time.deltaTime * rotSpeed, 0);
         transform.rotation *= Quaternion.Euler(0, rot * Time.deltaTime * rotSpeed, 0);
     }
-   
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (IsLocalPlayer)
+        {
+            if (other.CompareTag("Bullet") && other.GetComponent<Bullet>().ownerIndex != this.NetworkObjectId)
+            {
+                RequestTakeDamage_Rpc(health - 1);
+                
+                if (health >= 0)
+                {
+                    print("I HAVE DIED!!!");
+                    //has died, needs to up killers score... not own
+                    ulong killerIndex = other.gameObject.GetComponent<Bullet>().ownerIndex;
+                    //HOST doesnt spawn for client -> error
+                    RequestRespawnAndScore_Rpc(5, FindFirstObjectByType<Host>().score[killerIndex] + 1, killerIndex);
+                }
+
+
+                //other.GetComponent<NetworkObject>().Despawn();
+                Destroy(other.gameObject);
+            }
+        }
+    }
+
+    [Rpc(SendTo.Server, RequireOwnership = false, Delivery = RpcDelivery.Reliable)]
+    void RequestTakeDamage_Rpc(int newHealth)
+    {
+        TakeDamage_Rpc(newHealth);
+    }
+
+    [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
+    void TakeDamage_Rpc(int newHealth)
+    {
+        health = newHealth;
+    }
+
+
+    [Rpc(SendTo.Server, RequireOwnership = false, Delivery = RpcDelivery.Reliable)]
+    void RequestRespawnAndScore_Rpc(int newHealth, int newScore, ulong killerIndex)
+    {
+        RespawnAndScore_Rpc(newHealth, newScore, killerIndex);
+    }
+
+    [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
+    void RespawnAndScore_Rpc(int newHealth, int newScore, ulong killerIndex)
+    {
+        health = newHealth;
+        transform.position = Vector3.zero;
+
+        FindFirstObjectByType<Host>().score[killerIndex] = newScore;
+    }
 }
