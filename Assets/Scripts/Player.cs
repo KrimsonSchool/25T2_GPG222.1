@@ -27,15 +27,6 @@ public class Player : NetworkBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
-
-        if (IsHost)
-        {
-            //gameObject.AddComponent<Host>();
-        }
-        else
-        {
-            Destroy(gameObject.GetComponent<Host>());
-        }
     }
 
     public void Update()
@@ -72,7 +63,7 @@ public class Player : NetworkBehaviour
             {
                 RequestTakeDamage_Rpc(health - 1);
                 
-                if (health >= 0)
+                if (health <= 0)
                 {
                     print("I HAVE DIED!!!");
                     //has died, needs to up killers score... not own
