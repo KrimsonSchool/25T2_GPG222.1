@@ -30,7 +30,11 @@ public class Player : NetworkBehaviour
 
         if (IsHost)
         {
-            gameObject.AddComponent<Host>();
+            //gameObject.AddComponent<Host>();
+        }
+        else
+        {
+            Destroy(gameObject.GetComponent<Host>());
         }
     }
 
