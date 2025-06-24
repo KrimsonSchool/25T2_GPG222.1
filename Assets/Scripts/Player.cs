@@ -1,5 +1,9 @@
 using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using TMPro;
 using Unity.Netcode;
+using Unity.Services.Authentication.PlayerAccounts;
 using UnityEngine;
 
 public class Player : NetworkBehaviour
@@ -11,6 +15,12 @@ public class Player : NetworkBehaviour
 
     public int health;
 
+
+    public TextMeshPro titleText;
+    
+    //list of in network object id's of bullets, when it wants kill, cross from list for all
+    
+    //public NetworkVariable<string> names;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -21,13 +31,46 @@ public class Player : NetworkBehaviour
         base.OnNetworkSpawn();
         if (IsLocalPlayer)
         {
-            print("MY ID: " + this.NetworkObjectId);
-
+            gameObject.tag = "Player";
+            string nme = "Player " + NetworkObjectId;
+            print(nme);
+/*
+            if (!names.Value.Contains(nme))
+            {
+                
+            }
+*/
+            //names.Value[NetworkObjectId]=nme;
+            
             cam.SetActive(true);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            
+            //RequestSetName_Rpc("Player" + NetworkObjectId);
         }
+        
+        Player[] players = FindObjectsOfType<Player>();
+
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].titleText.text = "Player "+players[i].gameObject.GetComponent<NetworkObject>().NetworkObjectId;
+        }
+        
+        //titleText.text = name.Value;
+        //gameObject.name = name.Value;
+
     }
+
+    private void OnEnable()
+    {
+        //names.OnValueChanged += NameListChanged;
+    }
+
+    private void OnDisable()
+    {
+        //names.OnValueChanged -= NameListChanged;
+    }
+
 
     public void Update()
     {
@@ -36,8 +79,10 @@ public class Player : NetworkBehaviour
         {
             transform.position += transform.forward * Time.deltaTime * speed * Input.GetAxis("Vertical") +
                                   transform.right * Time.deltaTime * speed * Input.GetAxis("Horizontal");
+            
+            transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * Time.deltaTime * rotSpeed, 0);
 
-            Rotate_Request_Rpc(Input.GetAxis("Mouse X"));
+            //Rotate_Request_Rpc(Input.GetAxis("Mouse X"));
         }
     }
 
@@ -69,12 +114,12 @@ public class Player : NetworkBehaviour
                     //has died, needs to up killers score... not own
                     ulong killerIndex = other.gameObject.GetComponent<Bullet>().ownerIndex;
                     //HOST doesnt spawn for client -> error
-                    RequestRespawnAndScore_Rpc(5, FindFirstObjectByType<Host>().score[killerIndex] + 1, killerIndex);
+                    RequestRespawnAndScore_Rpc(5, FindFirstObjectByType<Eye>().score[killerIndex] + 1, killerIndex);
                 }
 
 
                 //other.GetComponent<NetworkObject>().Despawn();
-                Destroy(other.gameObject);
+                //Destroy(other.gameObject);
             }
         }
     }
@@ -104,6 +149,27 @@ public class Player : NetworkBehaviour
         health = newHealth;
         transform.position = Vector3.zero;
 
-        FindFirstObjectByType<Host>().score[killerIndex] = newScore;
+        FindFirstObjectByType<Eye>().score[killerIndex] = newScore;
+    }
+    
+    
+    
+    [Rpc(SendTo.Server, RequireOwnership = false, Delivery = RpcDelivery.Reliable)]
+    void RequestSetName_Rpc(string objName)
+    {
+        SetName_Rpc(objName);
+    }
+
+    [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
+    void SetName_Rpc(string objName)
+    {
+        titleText.text = objName;
+        gameObject.name = objName;
+    }
+
+
+    private void NameListChanged(string prev, string next)
+    {
+        //
     }
 }

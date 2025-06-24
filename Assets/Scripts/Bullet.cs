@@ -1,4 +1,6 @@
+using System;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bullet : NetworkBehaviour
@@ -20,10 +22,12 @@ public class Bullet : NetworkBehaviour
         transform.position += transform.forward * Time.deltaTime * speed;
 
     }
-    
-    [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
-    private void Move_Rpc()
+
+    private void OnTriggerEnter(Collider other)
     {
-        transform.position += transform.forward * Time.deltaTime * speed;
+        if (other.tag == "Player")
+        {
+            Destroy(gameObject);
+        }
     }
 }

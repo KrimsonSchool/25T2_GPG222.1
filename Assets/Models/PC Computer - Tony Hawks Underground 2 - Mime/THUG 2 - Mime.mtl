@@ -1,0 +1,72 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 06.03.2011 23:37:34
+
+newmtl Material__7458
+	Ns 10.000000000000
+	Ni 1.500000000000
+	d 1.000000000000
+	Tr 0.000000000000
+	Tf 1.000000000000 1.000000000000 1.000000000000 
+	illum 2
+	Ka 0.587999999523 0.587999999523 0.587999999523
+	Kd 0.587999999523 0.587999999523 0.587999999523
+	Ks 0.000000000000 0.000000000000 0.000000000000
+	Ke 0.000000000000 0.000000000000 0.000000000000
+	map_Ka C:\Documents and Settings\Friedslick6\My Documents\3dsmax\scenes\textures\THUG 2 - Mime\Tophat.png
+	map_Kd C:\Documents and Settings\Friedslick6\My Documents\3dsmax\scenes\textures\THUG 2 - Mime\Tophat.png
+
+newmtl Material__7456
+	Ns 10.000000000000
+	Ni 1.500000000000
+	d 1.000000000000
+	Tr 0.000000000000
+	Tf 1.000000000000 1.000000000000 1.000000000000 
+	illum 2
+	Ka 0.587999999523 0.587999999523 0.587999999523
+	Kd 0.587999999523 0.587999999523 0.587999999523
+	Ks 0.000000000000 0.000000000000 0.000000000000
+	Ke 0.000000000000 0.000000000000 0.000000000000
+	map_Ka C:\Documents and Settings\Friedslick6\My Documents\3dsmax\scenes\textures\THUG 2 - Mime\Feet.png
+	map_Kd C:\Documents and Settings\Friedslick6\My Documents\3dsmax\scenes\textures\THUG 2 - Mime\Feet.png
+
+newmtl Material__7459
+	Ns 10.000000000000
+	Ni 1.500000000000
+	d 1.000000000000
+	Tr 0.000000000000
+	Tf 1.000000000000 1.000000000000 1.000000000000 
+	illum 2
+	Ka 0.587999999523 0.587999999523 0.587999999523
+	Kd 0.587999999523 0.587999999523 0.587999999523
+	Ks 0.000000000000 0.000000000000 0.000000000000
+	Ke 0.000000000000 0.000000000000 0.000000000000
+	map_Ka C:\Documents and Settings\Friedslick6\My Documents\3dsmax\scenes\textures\THUG 2 - Mime\Face.png
+	map_Kd C:\Documents and Settings\Friedslick6\My Documents\3dsmax\scenes\textures\THUG 2 - Mime\Face.png
+
+newmtl Material__7460
+	Ns 10.000000000000
+	Ni 1.500000000000
+	d 1.000000000000
+	Tr 0.000000000000
+	Tf 1.000000000000 1.000000000000 1.000000000000 
+	illum 2
+	Ka 0.587999999523 0.587999999523 0.587999999523
+	Kd 0.587999999523 0.587999999523 0.587999999523
+	Ks 0.000000000000 0.000000000000 0.000000000000
+	Ke 0.000000000000 0.000000000000 0.000000000000
+	map_Ka C:\Documents and Settings\Friedslick6\My Documents\3dsmax\scenes\textures\THUG 2 - Mime\Legs.png
+	map_Kd C:\Documents and Settings\Friedslick6\My Documents\3dsmax\scenes\textures\THUG 2 - Mime\Legs.png
+
+newmtl Material__7453
+	Ns 10.000000000000
+	Ni 1.500000000000
+	d 1.000000000000
+	Tr 0.000000000000
+	Tf 1.000000000000 1.000000000000 1.000000000000 
+	illum 2
+	Ka 0.587999999523 0.587999999523 0.587999999523
+	Kd 0.587999999523 0.587999999523 0.587999999523
+	Ks 0.000000000000 0.000000000000 0.000000000000
+	Ke 0.000000000000 0.000000000000 0.000000000000
+	map_Ka C:\Documents and Settings\Friedslick6\My Documents\3dsmax\scenes\textures\THUG 2 - Mime\Chest, Arms.png
+	map_Kd C:\Documents and Settings\Friedslick6\My Documents\3dsmax\scenes\textures\THUG 2 - Mime\Chest, Arms.png
