@@ -102,7 +102,7 @@ public class Player : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (IsLocalPlayer)
+        if (IsServer)
         {
             if (other.CompareTag("Bullet") && other.GetComponent<Bullet>().ownerIndex != this.NetworkObjectId)
             {
