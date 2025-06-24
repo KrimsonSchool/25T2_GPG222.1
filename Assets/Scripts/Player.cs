@@ -75,7 +75,7 @@ public class Player : NetworkBehaviour
     public void Update()
     {
         // Local only. Not networked
-        if (IsServer)
+        if (IsLocalPlayer)
         {
             transform.position += transform.forward * Time.deltaTime * speed * Input.GetAxis("Vertical") +
                                   transform.right * Time.deltaTime * speed * Input.GetAxis("Horizontal");
