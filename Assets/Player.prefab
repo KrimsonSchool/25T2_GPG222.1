@@ -1124,7 +1124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  bullet: {fileID: 3329487361121653897, guid: b4a936bda0270f57f97569aa5abbf9c4, type: 3}
+  bulletPrefab: {fileID: 3329487361121653897, guid: b4a936bda0270f57f97569aa5abbf9c4, type: 3}
   shootFrom: {fileID: 2060574958776960098}
   hand: {fileID: 5501943351633309458}
   handShoot: {fileID: 4009731021480422484}

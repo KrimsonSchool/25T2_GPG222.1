@@ -19,7 +19,6 @@ public class Player : NetworkBehaviour
     public TextMeshPro titleText;
     
     //list of in network object id's of bullets, when it wants kill, cross from list for all
-    
     //public NetworkVariable<string> names;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

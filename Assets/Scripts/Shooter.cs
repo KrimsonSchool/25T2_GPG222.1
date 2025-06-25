@@ -3,7 +3,7 @@ using Unity.Netcode;
 
 public class Shooter : NetworkBehaviour
 {
-    public GameObject bullet;
+    public GameObject bulletPrefab;
     public GameObject shootFrom;
 
     public GameObject hand;
@@ -59,7 +59,9 @@ public class Shooter : NetworkBehaviour
     private void Shoot_Response_Rpc()
     {
         //bullet.GetComponent<NetworkObject>().Spawn();
-        Instantiate(bullet, shootFrom.transform.position, transform.rotation).GetComponent<Bullet>().ownerIndex = this.NetworkObjectId;
+        GameObject blet = Instantiate(bulletPrefab, shootFrom.transform.position, transform.rotation);
+        blet.GetComponent<Bullet>().ownerIndex = this.NetworkObjectId;
+        blet.GetComponent<NetworkObject>().Spawn();
         
         hand.SetActive(false);
         handShoot.SetActive(true);

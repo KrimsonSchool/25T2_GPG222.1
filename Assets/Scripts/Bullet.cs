@@ -9,6 +9,9 @@ public class Bullet : NetworkBehaviour
 
     [HideInInspector]
     public ulong ownerIndex;
+
+    private float timer;
+    public float lifeTime;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {   
@@ -20,6 +23,12 @@ public class Bullet : NetworkBehaviour
     {
         //Move_Rpc();
         transform.position += transform.forward * Time.deltaTime * speed;
+        
+        timer += Time.deltaTime;
+        if (timer >= lifeTime)
+        {
+            GetComponent<NetworkObject>().Despawn();
+        }
 
     }
 
@@ -27,7 +36,8 @@ public class Bullet : NetworkBehaviour
     {
         if (other.tag == "Player")
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            GetComponent<NetworkObject>().Despawn();
         }
     }
 }

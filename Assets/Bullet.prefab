@@ -197,3 +197,4 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   speed: 5
   ownerIndex: 0
+  lifeTime: 3
