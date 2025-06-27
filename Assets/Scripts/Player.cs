@@ -113,7 +113,8 @@ public class Player : NetworkBehaviour
                     //has died, needs to up killers score... not own
                     ulong killerIndex = other.gameObject.GetComponent<Bullet>().ownerIndex;
                     //HOST doesnt spawn for client -> error
-                    RequestRespawnAndScore_Rpc(5, FindFirstObjectByType<Eye>().score[killerIndex] + 1, killerIndex);
+                    
+                    //RequestRespawnAndScore_Rpc(5, FindFirstObjectByType<Eye>().score[killerIndex] + 1, killerIndex);
                 }
 
 
@@ -148,7 +149,7 @@ public class Player : NetworkBehaviour
         health = newHealth;
         transform.position = Vector3.zero;
 
-        FindFirstObjectByType<Eye>().score[killerIndex] = newScore;
+        //FindFirstObjectByType<Eye>().score[killerIndex] = newScore; //add global variable
     }
     
     

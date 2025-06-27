@@ -195,6 +195,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  speed: 5
+  speed: 25
   ownerIndex: 0
   lifeTime: 3

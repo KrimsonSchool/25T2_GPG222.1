@@ -6,26 +6,32 @@ public class Add : NetworkBehaviour
     private Player[] players;
 
     public float speed;
-    public Transform mimeCore;
+    public Transform goal;
 
     private float timer;
     public float attackTime;
 
-    private float timer2;
-    public float selectorTimer;
+
+    public int health;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         players = FindObjectsByType<Player>(FindObjectsSortMode.InstanceID);
+        Transform mimeCore = GameObject.FindWithTag("Finish").GetComponent<Transform>();
+        goal = mimeCore;
+        if (Random.Range(0, 2) == 1)
+        {
+            //go after players
+            goal = players[Random.Range(0, players.Length)].transform;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, mimeCore.position, speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, goal.position, speed * Time.deltaTime);
         transform.position = new Vector3(transform.position.x, 1.286f, transform.position.z);
-        
         
         
         timer += Time.deltaTime;
@@ -34,12 +40,22 @@ public class Add : NetworkBehaviour
             //attack
             timer = 0;
         }
-        
-        timer2 += Time.deltaTime;
-        if (timer2 >= selectorTimer)
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (IsServer)
         {
-            //select one of the players or the Mime Core to go towards;
-            timer2 = 0;
+            if (other.CompareTag("Bullet"))
+            {
+                health--;
+
+                if (health <= 0)
+                {
+                    GetComponent<NetworkObject>().Despawn();
+                    Destroy(gameObject);
+                }
+            }
         }
     }
 }
