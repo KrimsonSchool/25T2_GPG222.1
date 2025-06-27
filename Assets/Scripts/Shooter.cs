@@ -28,6 +28,7 @@ public class Shooter : NetworkBehaviour
             {
                 if (!shot)
                 {
+                    //
                     Shoot_Request_Rpc();
                 }
             }
@@ -59,10 +60,13 @@ public class Shooter : NetworkBehaviour
     private void Shoot_Response_Rpc()
     {
         //bullet.GetComponent<NetworkObject>().Spawn();
-        GameObject blet = Instantiate(bulletPrefab, shootFrom.transform.position, transform.rotation);
-        blet.GetComponent<Bullet>().ownerIndex = this.NetworkObjectId;
-        blet.GetComponent<NetworkObject>().Spawn();
-        
+        if (IsServer)
+        {
+            GameObject blet = Instantiate(bulletPrefab, shootFrom.transform.position, transform.rotation);
+            blet.GetComponent<Bullet>().ownerIndex = this.NetworkObjectId;
+            blet.GetComponent<NetworkObject>().Spawn();
+        }
+
         hand.SetActive(false);
         handShoot.SetActive(true);
         shot = true;
