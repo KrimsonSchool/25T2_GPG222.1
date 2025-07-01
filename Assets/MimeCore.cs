@@ -32,7 +32,7 @@ public class MimeCore : NetworkBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-            if (other.CompareTag("Bullet"))
+            if (other.CompareTag("EnemyAttack"))
             {
                 pedestalHealth.Value--;
             }

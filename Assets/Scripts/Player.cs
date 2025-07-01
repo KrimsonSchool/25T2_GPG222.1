@@ -116,10 +116,19 @@ public class Player : NetworkBehaviour
                     
                     //RequestRespawnAndScore_Rpc(5, FindFirstObjectByType<Eye>().score[killerIndex] + 1, killerIndex);
                 }
-
-
                 //other.GetComponent<NetworkObject>().Despawn();
                 //Destroy(other.gameObject);
+            }
+            
+            if (other.CompareTag("EnemyAttack"))
+            {
+                RequestTakeDamage_Rpc(health - 1);
+                
+                if (health <= 0)
+                {
+                    print("I HAVE DIED!!!");
+                    RequestRespawn_Rpc(5);
+                }
             }
         }
     }
@@ -138,13 +147,13 @@ public class Player : NetworkBehaviour
 
 
     [Rpc(SendTo.Server, RequireOwnership = false, Delivery = RpcDelivery.Reliable)]
-    void RequestRespawnAndScore_Rpc(int newHealth, int newScore, ulong killerIndex)
+    void RequestRespawn_Rpc(int newHealth)
     {
-        RespawnAndScore_Rpc(newHealth, newScore, killerIndex);
+        Respawn_Rpc(newHealth);
     }
 
     [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
-    void RespawnAndScore_Rpc(int newHealth, int newScore, ulong killerIndex)
+    void Respawn_Rpc(int newHealth)
     {
         health = newHealth;
         transform.position = Vector3.zero;
