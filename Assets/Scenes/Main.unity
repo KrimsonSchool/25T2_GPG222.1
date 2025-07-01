@@ -4201,7 +4201,7 @@ GameObject:
   - component: {fileID: 722298628}
   m_Layer: 0
   m_Name: LaserRight
-  m_TagString: Untagged
+  m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8879,7 +8879,7 @@ GameObject:
   - component: {fileID: 1521514018}
   m_Layer: 0
   m_Name: LaserLeft
-  m_TagString: Untagged
+  m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32377,8 +32377,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5629480036481390665}
+  - component: {fileID: 5629480036481390666}
+  - component: {fileID: 5629480036481390667}
   m_Layer: 0
-  m_Name: BIO-I_PC_N.P.C_Clown
+  m_Name: Clown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32432,6 +32434,40 @@ Transform:
   - {fileID: 1521514018}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -82.9, z: 0}
+--- !u!114 &5629480036481390666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4995687056271213299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acc98032d85a50b07b2d51a843b5d923, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &5629480036481390667
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4995687056271213299}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1ba7a627683aba9b0912e2e35801139d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!33 &6246235484269746775
 MeshFilter:
   m_ObjectHideFlags: 0

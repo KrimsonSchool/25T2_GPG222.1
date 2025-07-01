@@ -47,6 +47,8 @@ public class Add : NetworkBehaviour, Health
         }
     }
 
+    //TODO attack players and Mime Core
+    
     public void Damage(int damage, ulong owner)
     {
         if (IsServer)
