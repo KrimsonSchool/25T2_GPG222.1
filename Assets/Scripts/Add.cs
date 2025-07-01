@@ -1,7 +1,8 @@
+using DefaultNamespace;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Add : NetworkBehaviour
+public class Add : NetworkBehaviour, Health
 {
     private Player[] players;
 
@@ -45,24 +46,21 @@ public class Add : NetworkBehaviour
             timer = 0;
         }
     }
-    
-    private void OnTriggerEnter(Collider other)
+
+    public void Damage(int damage, ulong owner)
     {
         if (IsServer)
         {
-            if (other.CompareTag("Bullet"))
-            {
-                health--;
+            health--;
 
-                if (health <= 0)
-                {
-                    ulong ownerIndex = other.gameObject.GetComponent<Bullet>().ownerIndex;
-                    int index = (int)ownerIndex;
+            if (health <= 0)
+            {
+                ulong ownerIndex = owner;
+                int index = (int)ownerIndex;
                     
-                    FindFirstObjectByType<Eye>().playerScores[index] ++;
-                    GetComponent<NetworkObject>().Despawn();
-                    Destroy(gameObject);
-                }
+                FindFirstObjectByType<Eye>().playerScores[index] ++;
+                GetComponent<NetworkObject>().Despawn();
+                Destroy(gameObject);
             }
         }
     }

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using DefaultNamespace;
 using NUnit.Framework;
 using TMPro;
 using Unity.Netcode;
 using Unity.Services.Authentication.PlayerAccounts;
 using UnityEngine;
 
-public class Player : NetworkBehaviour
+public class Player : NetworkBehaviour, Health
 {
     public GameObject cam;
 
@@ -98,44 +99,16 @@ public class Player : NetworkBehaviour
         //transform.Rotate(0, rot * Time.deltaTime * rotSpeed, 0);
         transform.rotation *= Quaternion.Euler(0, rot * Time.deltaTime * rotSpeed, 0);
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (IsServer)
-        {
-            if (other.CompareTag("Bullet") && other.GetComponent<Bullet>().ownerIndex != this.NetworkObjectId)
-            {
-                RequestTakeDamage_Rpc(health - 1);
-                
-                if (health <= 0)
-                {
-                    print("I HAVE DIED!!!");
-                    //has died, needs to up killers score... not own
-                    ulong killerIndex = other.gameObject.GetComponent<Bullet>().ownerIndex;
-                    //HOST doesnt spawn for client -> error
-                    
-                    //RequestRespawnAndScore_Rpc(5, FindFirstObjectByType<Eye>().score[killerIndex] + 1, killerIndex);
-                }
-                //other.GetComponent<NetworkObject>().Despawn();
-                //Destroy(other.gameObject);
-            }
-            
-            if (other.CompareTag("EnemyAttack"))
-            {
-                RequestTakeDamage_Rpc(health - 1);
-                
-                if (health <= 0)
-                {
-                    print("I HAVE DIED!!!");
-                    RequestRespawn_Rpc(5);
-                }
-            }
-        }
-    }
+    
 
     [Rpc(SendTo.Server, RequireOwnership = false, Delivery = RpcDelivery.Reliable)]
     void RequestTakeDamage_Rpc(int newHealth)
     {
+        if (health <= 0)
+        {
+            print("I HAVE DIED!!!");
+            RequestRespawn_Rpc(5);
+        }
         TakeDamage_Rpc(newHealth);
     }
 
@@ -180,5 +153,11 @@ public class Player : NetworkBehaviour
     private void NameListChanged(string prev, string next)
     {
         //
+    }
+
+    public void Damage(int damage, ulong owner)
+    {
+        ulong killerIndex = owner;
+        RequestTakeDamage_Rpc(damage);
     }
 }

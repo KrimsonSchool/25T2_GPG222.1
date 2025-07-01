@@ -1,4 +1,5 @@
 using System;
+using DefaultNamespace;
 using Unity.Netcode;
 using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
@@ -34,8 +35,9 @@ public class Bullet : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Enemy"))
+        if (other.GetComponent<Health>()!=null)
         {
+            other.GetComponent<Health>().Damage(1, ownerIndex);
             Kill();
         }
     }
