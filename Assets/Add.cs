@@ -30,7 +30,11 @@ public class Add : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, goal.position, speed * Time.deltaTime);
+        if (goal != null)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, goal.position, speed * Time.deltaTime);
+        }
+
         transform.position = new Vector3(transform.position.x, 1.286f, transform.position.z);
         
         
@@ -52,6 +56,10 @@ public class Add : NetworkBehaviour
 
                 if (health <= 0)
                 {
+                    ulong ownerIndex = other.gameObject.GetComponent<Bullet>().ownerIndex;
+                    int index = (int)ownerIndex;
+                    
+                    FindFirstObjectByType<Eye>().playerScores[index] ++;
                     GetComponent<NetworkObject>().Despawn();
                     Destroy(gameObject);
                 }
