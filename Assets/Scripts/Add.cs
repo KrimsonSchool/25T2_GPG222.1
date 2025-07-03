@@ -14,6 +14,9 @@ public class Add : NetworkBehaviour, Health
 
 
     public int health;
+
+    public GameObject attackSurface;
+    public GameObject attackPos;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void OnNetworkSpawn()
     {
@@ -43,6 +46,7 @@ public class Add : NetworkBehaviour, Health
         if (timer >= attackTime)
         {
             //attack
+            Attack();
             timer = 0;
         }
     }
@@ -51,7 +55,7 @@ public class Add : NetworkBehaviour, Health
     
     public void Damage(int damage, ulong owner)
     {
-        if (IsServer)
+        if (IsServer && owner != 999)
         {
             health--;
 
@@ -65,5 +69,11 @@ public class Add : NetworkBehaviour, Health
                 Destroy(gameObject);
             }
         }
+    }
+
+    public void Attack()
+    {
+        GameObject ase = Instantiate(attackSurface, attackPos.transform.position, Quaternion.identity);
+        ase.GetComponent<NetworkObject>().Spawn();
     }
 }

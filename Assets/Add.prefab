@@ -295,6 +295,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &4177989553952090631
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5555254709060661083}
+  m_Layer: 0
+  m_Name: Attack Pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5555254709060661083
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4177989553952090631}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0.53, z: -0.86}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7039427591032603536}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6593574808322682683
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,12 +441,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8197113992228423234}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.10960926, y: 0.6985609, z: -0.69855875, w: 0.10960895}
+  m_LocalRotation: {x: 0.10959103, y: 0.6984378, z: -0.6986816, w: 0.10962928}
   m_LocalPosition: {x: -2.66, y: 1.286, z: 7.17}
   m_LocalScale: {x: 0.3043098, y: 0.3043098, z: 0.3043098}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5904822079351593507}
+  - {fileID: 5555254709060661083}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90.01999, y: 180, z: 17.835007}
 --- !u!136 &564972037637010301
@@ -454,7 +486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 3910478358
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  InScenePlacedSourceGlobalObjectIdHash: 3910478358
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -527,8 +559,10 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   speed: 5
   goal: {fileID: 0}
-  attackTime: 0
+  attackTime: 5
   health: 5
+  attackSurface: {fileID: 1214417611035750443, guid: 659a32c4cbd42932d9a093b127dbc92e, type: 3}
+  attackPos: {fileID: 4177989553952090631}
 --- !u!54 &-3737886203622402429
 Rigidbody:
   m_ObjectHideFlags: 0
