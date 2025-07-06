@@ -9,6 +9,8 @@ public class MimeCore : NetworkBehaviour
     public TextMeshPro healthText;
 
     public GameObject splo;
+
+    public NetworkVariable<bool> isDead;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
 
@@ -33,10 +35,13 @@ public class MimeCore : NetworkBehaviour
 
         if (pedestalHealth.Value <= 0)
         {
+            splo.SetActive(true);
+            gameObject.SetActive(false);
             if (IsServer)
             {
-                splo.SetActive(true);
-                gameObject.SetActive(false);
+                //isDead.Value = true;
+                
+                
             }
         }
     }

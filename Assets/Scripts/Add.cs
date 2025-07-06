@@ -37,25 +37,28 @@ public class Add : NetworkBehaviour, Health
 
     void Update()
     {
-        //if goal isnt null
-        if (goal != null)
+        if (IsServer)
         {
-            //move towards the gaol based on speed
-            transform.position = Vector3.MoveTowards(transform.position, goal.position, speed * Time.deltaTime);
-        }
+            //if goal isnt null
+            if (goal != null)
+            {
+                //move towards the gaol based on speed
+                transform.position = Vector3.MoveTowards(transform.position, goal.position, speed * Time.deltaTime);
+            }
 
-        //idk...
-        transform.position = new Vector3(transform.position.x, 1.286f, transform.position.z);
-        
-        //increment timer
-        timer += Time.deltaTime;
-        //if timer is greater than attack time
-        if (timer >= attackTime)
-        {
-            //trigger attack function
-            Attack();
-            //set the timer to 0
-            timer = 0;
+            //idk...
+            transform.position = new Vector3(transform.position.x, 1.286f, transform.position.z);
+
+            //increment timer
+            timer += Time.deltaTime;
+            //if timer is greater than attack time
+            if (timer >= attackTime)
+            {
+                //trigger attack function
+                Attack();
+                //set the timer to 0
+                timer = 0;
+            }
         }
     }
     
