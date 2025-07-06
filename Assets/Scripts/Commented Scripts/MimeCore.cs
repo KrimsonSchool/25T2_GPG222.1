@@ -10,12 +10,11 @@ public class MimeCore : NetworkBehaviour
 
     public GameObject splo;
 
-    public NetworkVariable<bool> isDead;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-
-
+    //on spawn on network
     public override void OnNetworkSpawn()
-    {
+    {        
+        base.OnNetworkSpawn();
+        //cal Health changed function
         HealthChanged(pedestalHealth.Value, pedestalHealth.Value);
     }
 
@@ -29,35 +28,32 @@ public class MimeCore : NetworkBehaviour
         pedestalHealth.OnValueChanged -= HealthChanged;
     }
 
+    //health changed function
     void HealthChanged(int oldHealth, int newHealth)
     {
+        //set the text display to be the current health
         healthText.text = "HP: "+newHealth;
 
+        //if the health is less than 1
         if (pedestalHealth.Value <= 0)
         {
+            //activate the explosion effect
             splo.SetActive(true);
+            //disable self
             gameObject.SetActive(false);
-            if (IsServer)
-            {
-                //isDead.Value = true;
-                
-                
-            }
         }
     }
     
+    //on enter trigger
     private void OnTriggerEnter(Collider other)
     {
-            if (other.CompareTag("EnemyAttack"))
-            {
-                //pedestalHealth.Value--;
-            }
+        //if the other object has the Enemy tag
             if (other.CompareTag("Enemy"))
             {
+                //reduce health by 1
                 pedestalHealth.Value--;
-                other.GetComponent<Add>().Damage(999, 0);
-                
-                print("Killing clown...");
+                //deal 999 damage to the other object
+                other.GetComponent<Add>().Damage(999, 9999);
             }
         
     }

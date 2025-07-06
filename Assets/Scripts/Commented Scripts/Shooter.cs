@@ -22,53 +22,70 @@ public class Shooter : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        //if is the local player
         if (IsLocalPlayer)
         {
+            //if left mouse button is pressed
             if (Input.GetMouseButtonDown(0))
             {
+                //if hasn't recently shot
                 if (!shot)
                 {
-                    //
+                    //trigger shoot request to server
                     Shoot_Request_Rpc();
                 }
             }
         }
 
+        //if has shot recently
         if (shot)
         {
+            //increment timer
             timer+=Time.deltaTime;
+            //if timer is greater than shot speed
             if (timer >= shootSpeed)
             {
+                //set the timer to 0
                 timer = 0;
+                //set has shot recently to false
                 shot = false;
+                //activate normal hand
                 hand.SetActive(true);
+                //deactivate shooting hand
                 handShoot.SetActive(false);
             }
         }
     }
     
+    //send shoot request to server
     [Rpc(SendTo.Server, RequireOwnership = false)]
     private void Shoot_Request_Rpc()
     {
-        // Check if it's legal/not cheating
+        //trigger server shoot function
         Shoot_Response_Rpc();
     }
 
 
-// Function that runs from the Server TO ALL clients
+    //server shoot function
     [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
     private void Shoot_Response_Rpc()
     {
-        //bullet.GetComponent<NetworkObject>().Spawn();
+        //if is the server
         if (IsServer)
         {
+            //spawn a bullet
             GameObject blet = Instantiate(bulletPrefab, shootFrom.transform.position, transform.rotation);
+            //set the bullets owner to this player
             blet.GetComponent<Bullet>().ownerIndex = this.NetworkObjectId;
+            //spawn the bullet on the server
             blet.GetComponent<NetworkObject>().Spawn();
         }
 
+        //set the normal hand inactive
         hand.SetActive(false);
+        //show the shooting hand
         handShoot.SetActive(true);
+        //set has shot recently to true
         shot = true;
     }
 }
