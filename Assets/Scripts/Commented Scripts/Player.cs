@@ -22,7 +22,7 @@ public class Player : NetworkBehaviour, Health
 
     public Slider hpSlider;
 
-    //on player spawning in the server
+    //on player spawning in the server, triggers once network server is available
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();

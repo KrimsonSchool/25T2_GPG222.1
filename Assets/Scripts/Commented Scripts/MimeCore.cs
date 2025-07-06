@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class MimeCore : NetworkBehaviour
 {
+    //networked variable to stay persistant across all players
     public NetworkVariable<int> pedestalHealth;
     public TextMeshPro healthText;
 
     public GameObject splo;
 
-    //on spawn on network
+    //triggers once the object has spawned on the server
     public override void OnNetworkSpawn()
     {        
         base.OnNetworkSpawn();
