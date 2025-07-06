@@ -57,7 +57,7 @@ public class Add : NetworkBehaviour, Health
     {
         if (IsServer && owner != 999)
         {
-            health--;
+            health-=damage;
 
             if (health <= 0)
             {

@@ -6,6 +6,7 @@ using TMPro;
 using Unity.Netcode;
 using Unity.Services.Authentication.PlayerAccounts;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : NetworkBehaviour, Health
 {
@@ -18,6 +19,8 @@ public class Player : NetworkBehaviour, Health
 
 
     public TextMeshPro titleText;
+
+    public Slider hpSlider;
     
     //list of in network object id's of bullets, when it wants kill, cross from list for all
     //public NetworkVariable<string> names;
@@ -31,6 +34,9 @@ public class Player : NetworkBehaviour, Health
         base.OnNetworkSpawn();
         if (IsLocalPlayer)
         {
+            hpSlider = FindFirstObjectByType<Slider>(FindObjectsInactive.Include);
+            hpSlider.gameObject.SetActive(true);
+            
             gameObject.tag = "Player";
             string nme = "Player " + NetworkObjectId;
             print(nme);
@@ -47,6 +53,8 @@ public class Player : NetworkBehaviour, Health
             Cursor.visible = false;
             
             //RequestSetName_Rpc("Player" + NetworkObjectId);
+            
+            hpSlider.maxValue = health;
         }
         
         Player[] players = FindObjectsOfType<Player>();
@@ -55,38 +63,21 @@ public class Player : NetworkBehaviour, Health
         {
             players[i].titleText.text = "Player "+players[i].gameObject.GetComponent<NetworkObject>().NetworkObjectId;
         }
-        
-        //titleText.text = name.Value;
-        //gameObject.name = name.Value;
-
     }
-
-    private void OnEnable()
-    {
-        //names.OnValueChanged += NameListChanged;
-    }
-
-    private void OnDisable()
-    {
-        //names.OnValueChanged -= NameListChanged;
-    }
-
 
     public void Update()
     {
-        // Local only. Not networked
         if (IsLocalPlayer)
         {
             transform.position += transform.forward * Time.deltaTime * speed * Input.GetAxis("Vertical") +
                                   transform.right * Time.deltaTime * speed * Input.GetAxis("Horizontal");
             
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * Time.deltaTime * rotSpeed, 0);
-
-            //Rotate_Request_Rpc(Input.GetAxis("Mouse X"));
+            
+            hpSlider.value = health;
         }
     }
 
-    //ROTATE
     [Rpc(SendTo.Server, RequireOwnership = false)]
     void Rotate_Request_Rpc(float rot = 0)
     {
@@ -96,7 +87,6 @@ public class Player : NetworkBehaviour, Health
     [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
     void Rotate_ServerResponse_Rpc(float rot = 0)
     {
-        //transform.Rotate(0, rot * Time.deltaTime * rotSpeed, 0);
         transform.rotation *= Quaternion.Euler(0, rot * Time.deltaTime * rotSpeed, 0);
     }
     
@@ -104,11 +94,6 @@ public class Player : NetworkBehaviour, Health
     [Rpc(SendTo.Server, RequireOwnership = false, Delivery = RpcDelivery.Reliable)]
     void RequestTakeDamage_Rpc(int newHealth)
     {
-        if (health <= 0)
-        {
-            print("I HAVE DIED!!!");
-            RequestRespawn_Rpc(5);
-        }
         TakeDamage_Rpc(newHealth);
     }
 
@@ -116,48 +101,31 @@ public class Player : NetworkBehaviour, Health
     void TakeDamage_Rpc(int newHealth)
     {
         health = newHealth;
+        if (health <= 0)
+        {
+            RequestRespawn_Rpc(5);
+        }
     }
 
 
     [Rpc(SendTo.Server, RequireOwnership = false, Delivery = RpcDelivery.Reliable)]
-    void RequestRespawn_Rpc(int newHealth)
+    void RequestRespawn_Rpc(int respawnHealth)
     {
-        Respawn_Rpc(newHealth);
+        Respawn_Rpc(respawnHealth);
     }
 
     [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
-    void Respawn_Rpc(int newHealth)
+    void Respawn_Rpc(int respawnHealth)
     {
-        health = newHealth;
         transform.position = Vector3.zero;
+        health = respawnHealth;
+        hpSlider.value = health;
 
-        //FindFirstObjectByType<Eye>().score[killerIndex] = newScore; //add global variable
-    }
-    
-    
-    
-    [Rpc(SendTo.Server, RequireOwnership = false, Delivery = RpcDelivery.Reliable)]
-    void RequestSetName_Rpc(string objName)
-    {
-        SetName_Rpc(objName);
-    }
-
-    [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
-    void SetName_Rpc(string objName)
-    {
-        titleText.text = objName;
-        gameObject.name = objName;
-    }
-
-
-    private void NameListChanged(string prev, string next)
-    {
-        //
     }
 
     public void Damage(int damage, ulong owner)
     {
         ulong killerIndex = owner;
-        RequestTakeDamage_Rpc(damage);
+        RequestTakeDamage_Rpc(health - damage);
     }
 }

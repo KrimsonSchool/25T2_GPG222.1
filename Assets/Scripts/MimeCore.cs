@@ -7,6 +7,8 @@ public class MimeCore : NetworkBehaviour
 {
     public NetworkVariable<int> pedestalHealth;
     public TextMeshPro healthText;
+
+    public GameObject splo;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
 
@@ -28,13 +30,29 @@ public class MimeCore : NetworkBehaviour
     void HealthChanged(int oldHealth, int newHealth)
     {
         healthText.text = "HP: "+newHealth;
+
+        if (pedestalHealth.Value <= 0)
+        {
+            if (IsServer)
+            {
+                splo.SetActive(true);
+                gameObject.SetActive(false);
+            }
+        }
     }
     
     private void OnTriggerEnter(Collider other)
     {
             if (other.CompareTag("EnemyAttack"))
             {
+                //pedestalHealth.Value--;
+            }
+            if (other.CompareTag("Enemy"))
+            {
                 pedestalHealth.Value--;
+                other.GetComponent<Add>().Damage(999, 0);
+                
+                print("Killing clown...");
             }
         
     }
