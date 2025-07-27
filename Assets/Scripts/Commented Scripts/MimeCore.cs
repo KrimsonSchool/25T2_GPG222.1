@@ -54,7 +54,7 @@ public class MimeCore : NetworkBehaviour
                 //reduce health by 1
                 pedestalHealth.Value--;
                 //deal 999 damage to the other object
-                other.GetComponent<Add>().Damage(999, 9999);
+                other.GetComponent<Add>().Damage(999, 0);
             }
         
     }

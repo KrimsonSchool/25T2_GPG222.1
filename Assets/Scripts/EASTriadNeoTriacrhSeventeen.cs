@@ -6,16 +6,29 @@ using UnityEngine;
 public class EASTriadNeoTriacrhSeventeen : NetworkBehaviour
 {
     private ulong ownerIndex = 999;
+
+    private float timer;
+    private float life;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
     }
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        life = 30;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        
+        timer+=Time.deltaTime;
+        if (timer >= life)
+        {
+            Kill();
+        }
     }
 
     private void OnTriggerEnter(Collider other)

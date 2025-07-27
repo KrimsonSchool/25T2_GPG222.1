@@ -1,0 +1,93 @@
+# Blender MTL File: 'None'
+# Material Count: 7
+
+newmtl phong01
+Ns 96.078431
+Ka 0.784314 0.784314 0.784314
+Kd 0.972549 0.972549 0.972549
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd phong01.png
+map_Ka phong01.png
+map_d phong01.png
+
+newmtl phong02
+Ns 96.078431
+Ka 0.784314 0.784314 0.784314
+Kd 0.972549 0.972549 0.972549
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd phong02.png
+map_Ka phong02.png
+map_d phong02.png
+
+newmtl phong03
+Ns 96.078431
+Ka 0.784314 0.784314 0.784314
+Kd 0.972549 0.972549 0.972549
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd phong03.png
+map_Ka phong03.png
+map_d phong03.png
+
+newmtl phong04
+Ns 96.078431
+Ka 0.784314 0.784314 0.784314
+Kd 0.972549 0.972549 0.972549
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd phong04.png
+map_Ka phong04.png
+map_d phong04.png
+
+newmtl phong05
+Ns 96.078431
+Ka 0.784314 0.784314 0.784314
+Kd 0.972549 0.972549 0.972549
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd phong05.png
+map_Ka phong05.png
+map_d phong05.png
+
+newmtl phong06
+Ns 96.078431
+Ka 0.784314 0.784314 0.784314
+Kd 0.972549 0.972549 0.972549
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd phong06.png
+map_Ka phong06.png
+map_d phong06.png
+
+newmtl shadow
+Ns 96.078431
+Ka 0.784314 0.784314 0.784314
+Kd 0.972549 0.972549 0.972549
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.290323
+illum 2
+map_Kd shadow.png
+map_Ka shadow.png
+map_d shadow.png

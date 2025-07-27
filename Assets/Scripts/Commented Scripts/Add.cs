@@ -66,7 +66,7 @@ public class Add : NetworkBehaviour, Health
     public void Damage(int damage, ulong owner)
     {
         //if is the Server and the attacker isn't ID 999
-        if (IsServer && owner != 999)
+        if (IsServer && owner != 999) //bug of set 999, not 999 array length
         {
             //reduce health by damage taken
             health-=damage;

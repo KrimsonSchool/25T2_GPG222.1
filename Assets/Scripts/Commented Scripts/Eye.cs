@@ -68,8 +68,8 @@ public class Eye : NetworkBehaviour
         //set the score text to Player Scores
         scoreText.text = "Player Scores:\n";
 
-        //for ever player score
-        for (int i = 0; i < playerScores.Count; i++)
+        //for every player score
+        for (int i = 1; i < playerScores.Count; i++)
         {
             //if that player score is greater than 0
             if (playerScores[i] > 0)
