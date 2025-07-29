@@ -75,6 +75,17 @@ public class Player : NetworkBehaviour, Health
             
             //set the hp slider's value to the players health
             hpSlider.value = health;
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
+            }
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
     }
 

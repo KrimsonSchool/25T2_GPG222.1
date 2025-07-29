@@ -15,8 +15,8 @@ public class Eye : NetworkBehaviour
     
     public TextMeshProUGUI scoreText;
 
-    private bool online;
-    
+    public NetworkVariable<bool> started;
+    public GameObject gameStartButton;
     //on network spawn
     public override void OnNetworkSpawn()
     {
@@ -33,9 +33,6 @@ public class Eye : NetworkBehaviour
                 playerScores.Add(0);
             }
         }
-
-        //set online to true
-        online = true;
         
     }
 
@@ -45,7 +42,7 @@ public class Eye : NetworkBehaviour
         //increment timer
         timer += Time.deltaTime;
         //if timer is greater than add time and is online and is the server
-        if (timer >= addTime && online && IsServer)
+        if (timer >= addTime && started.Value && IsServer)
         {
             //spawn an add
             GameObject add = Instantiate(adds, transform.position, transform.rotation);
@@ -78,5 +75,11 @@ public class Eye : NetworkBehaviour
                 scoreText.text += "Player " + i +": " + playerScores[i] + "\n";
             }
         }
+    }
+
+    public void StartGame()
+    {
+        started.Value = true;
+        gameStartButton.SetActive(false);
     }
 }

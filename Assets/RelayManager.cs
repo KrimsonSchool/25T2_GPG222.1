@@ -16,6 +16,7 @@ public class RelayManager : MonoBehaviour
     public TextMeshProUGUI lobbyCodeText;
     public GameObject lobbyUI;
     public GameObject connectingBuffer;
+    public GameObject gameStartButton;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -46,6 +47,7 @@ public class RelayManager : MonoBehaviour
         
         lobbyCodeText.text = "Lobby Code: " + joinCode;
         lobbyUI.SetActive(false);
+        gameStartButton.SetActive(true);
         
         return NetworkManager.Singleton.StartHost() ? joinCode : null;
     }
