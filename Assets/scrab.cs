@@ -18,6 +18,8 @@ public class scrab : MonoBehaviour
     public bool toggleGameobject;
     public bool triggerAnimator;
     public bool toggleObj;
+    public bool disableScrab;
+    public bool skulWepActive;
     
     [Header("Settings")] 
     
@@ -33,7 +35,7 @@ public class scrab : MonoBehaviour
     public float delay;
     public string nameOfObjectToEnable;
     public string animBoolToTrigger;
-    public GameObject objToToggle;
+    public GameObject[] objToToggle;
     //teleport
     //incriment int
     //decriment int
@@ -72,8 +74,8 @@ public class scrab : MonoBehaviour
 
     public void TriggerSes()
     {
-        
-        
+
+
         if (teleport)
         {
             otherObReg.transform.position = teleportLocation;
@@ -98,12 +100,26 @@ public class scrab : MonoBehaviour
 
         if (triggerAnimator)
         {
-            otherObReg.transform.Find("fpsarms").GetComponent<Animator>().SetBool(animBoolToTrigger, true);
+            otherObReg.transform.Find("fpsarms").GetComponent<Animator>().SetBool(animBoolToTrigger,
+                !otherObReg.transform.Find("fpsarms").GetComponent<Animator>().GetBool(animBoolToTrigger));
         }
 
         if (toggleObj)
         {
-            objToToggle.SetActive(!objToToggle.activeSelf);
+            foreach (var obj in objToToggle)
+            {
+                obj.SetActive(!obj.activeSelf);
+            }
+        }
+
+        if (skulWepActive)
+        {
+            FindFirstObjectByType<Shooter>().skulWep.Value = true;
+        }
+
+        if (disableScrab)
+        {
+            this.enabled = false;
         }
     }
 

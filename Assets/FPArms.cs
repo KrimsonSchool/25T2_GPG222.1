@@ -17,4 +17,9 @@ public class FPArms : MonoBehaviour
     {
         
     }
+
+    public void ShootDone()
+    {
+        GetComponent<Animator>().SetBool("Shoot", false);
+    }
 }

@@ -3,6 +3,7 @@ using Unity.Netcode;
 
 public class Shooter : NetworkBehaviour
 {
+    [Header("Main Wep")]
     public GameObject bulletPrefab;
     public GameObject shootFrom;
 
@@ -13,6 +14,14 @@ public class Shooter : NetworkBehaviour
     private float timer;
 
     public float shootSpeed;
+    
+    [Header("skul Wep")]
+    public GameObject bullet2Prefab;
+    public GameObject shoot2From;
+    
+    public float shoot2Speed;
+
+    public NetworkVariable<bool> skulWep;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -43,17 +52,29 @@ public class Shooter : NetworkBehaviour
             //increment timer
             timer+=Time.deltaTime;
             //if timer is greater than shot speed
-            if (timer >= shootSpeed)
+            if (skulWep.Value)
             {
-                //set the timer to 0
-                timer = 0;
-                //set has shot recently to false
-                shot = false;
-                //activate normal hand
-                hand.SetActive(true);
-                //deactivate shooting hand
-                handShoot.SetActive(false);
+                if (timer >= shoot2Speed)
+                {
+                    timer = 0;
+                    shot = false;
+                }
             }
+            else
+            {
+                if (timer >= shootSpeed)
+                {
+                    //set the timer to 0
+                    timer = 0;
+                    //set has shot recently to false
+                    shot = false;
+                    //activate normal hand
+                    hand.SetActive(true);
+                    //deactivate shooting hand
+                    handShoot.SetActive(false);
+                }
+            }
+            
         }
     }
     
@@ -70,22 +91,37 @@ public class Shooter : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost, RequireOwnership = false)]
     private void Shoot_Response_Rpc()
     {
-        //if is the server
-        if (IsServer)
+        if (skulWep.Value)
         {
-            //spawn a bullet
-            GameObject blet = Instantiate(bulletPrefab, shootFrom.transform.position, transform.rotation);
-            //set the bullets owner to this player
-            blet.GetComponent<Bullet>().ownerIndex = this.NetworkObjectId;
-            //spawn the bullet on the server
-            blet.GetComponent<NetworkObject>().Spawn();
-        }
+            if (IsServer)
+            {
+                GameObject blet = Instantiate(bullet2Prefab, shoot2From.transform.position, transform.rotation);
 
-        //set the normal hand inactive
-        hand.SetActive(false);
-        //show the shooting hand
-        handShoot.SetActive(true);
-        //set has shot recently to true
-        shot = true;
+                blet.GetComponent<Bullet>().ownerIndex = this.NetworkObjectId;
+                blet.GetComponent<NetworkObject>().Spawn();
+            }
+            transform.Find("fpsarms").GetComponent<Animator>().SetBool("Shoot", true);
+            shot = true;
+        }
+        else
+        {
+            //if is the server
+            if (IsServer)
+            {
+                //spawn a bullet
+                GameObject blet = Instantiate(bulletPrefab, shootFrom.transform.position, transform.rotation);
+                //set the bullets owner to this player
+                blet.GetComponent<Bullet>().ownerIndex = this.NetworkObjectId;
+                //spawn the bullet on the server
+                blet.GetComponent<NetworkObject>().Spawn();
+            }
+
+            //set the normal hand inactive
+            hand.SetActive(false);
+            //show the shooting hand
+            handShoot.SetActive(true);
+            //set has shot recently to true
+            shot = true;
+        }
     }
 }

@@ -15,6 +15,8 @@ public class Bullet : NetworkBehaviour
 
     public float lifeTime;
 
+    public int damage;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -37,7 +39,7 @@ public class Bullet : NetworkBehaviour
     {
         if (other.GetComponent<Health>()!=null)
         {
-            other.GetComponent<Health>().Damage(1, ownerIndex);
+            other.GetComponent<Health>().Damage(damage, ownerIndex);
             Kill();
         }
     }
