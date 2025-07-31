@@ -90,6 +90,10 @@ public class LobbySystem : MonoBehaviour
         {
             try
             {
+                if (currentLobby != null)
+                {
+                    LeaveLobby(currentLobby.Id);
+                }
                 loadingScreen.SetActive(true);
                 Lobby joinedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(lobbyCodeInput.text);
                 currentLobby = joinedLobby;
@@ -107,6 +111,10 @@ public class LobbySystem : MonoBehaviour
     {
         try
         {
+            if (currentLobby != null)
+            {
+                LeaveLobby(currentLobby.Id);
+            }
             loadingScreen.SetActive(true);
             Lobby joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
             currentLobby = joinedLobby;
