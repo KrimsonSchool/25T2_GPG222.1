@@ -8,6 +8,7 @@ public class Eye : NetworkBehaviour
     public GameObject adds;
 
     public float addTime;
+    private int loops;
 
     private float timer;
 
@@ -17,6 +18,8 @@ public class Eye : NetworkBehaviour
 
     public NetworkVariable<bool> started;
     public GameObject gameStartButton;
+
+    public GameObject[] spawnPoints;
     //on network spawn
     public override void OnNetworkSpawn()
     {
@@ -44,11 +47,15 @@ public class Eye : NetworkBehaviour
         //if timer is greater than add time and is online and is the server
         if (timer >= addTime && started.Value && IsServer)
         {
-            //spawn an add
-            GameObject add = Instantiate(adds, transform.position, transform.rotation);
-            //spawn the add on the server
-            add.GetComponent<NetworkObject>().Spawn();
-            
+            for (int i = 0; i < loops + 1; i++)
+            {
+                //spawn an add
+                GameObject add = Instantiate(adds, spawnPoints[Random.Range(0, loops+1)].transform.position,
+                    transform.rotation);
+                //spawn the add on the server
+                add.GetComponent<NetworkObject>().Spawn();
+            }
+
             //increment the add time by a random amount from -1 to 0.5
             addTime += Random.Range(-1f, 0.5f);
             //if add timer is 0 or less
@@ -56,6 +63,7 @@ public class Eye : NetworkBehaviour
             {
                 //set add time to 5
                 addTime = 5;
+                loops++;
             }
             
             //set the timer to 0
