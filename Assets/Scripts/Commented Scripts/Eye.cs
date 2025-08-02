@@ -42,6 +42,12 @@ public class Eye : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (started.Value && gameStartButton.activeSelf)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            gameStartButton.SetActive(false);
+        }
         //increment timer
         timer += Time.deltaTime;
         //if timer is greater than add time and is online and is the server
@@ -87,6 +93,9 @@ public class Eye : NetworkBehaviour
 
     public void StartGame()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
         started.Value = true;
         gameStartButton.SetActive(false);
     }

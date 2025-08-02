@@ -41,10 +41,6 @@ public class Player : NetworkBehaviour, Health
             
             //set player camera enabled
             cam.SetActive(true);
-            //lock the cursor to the centre
-            Cursor.lockState = CursorLockMode.Locked;
-            //make the cursor not visible
-            Cursor.visible = false;
             
             //set the hp sliders max value to current health
             hpSlider.maxValue = health;

@@ -31,6 +31,13 @@ public class LobbySystem : MonoBehaviour
 
     public GameObject joinButtonHolder;
     public GameObject lobbyJoinButton;
+    
+    public RelayManager relayManager;
+
+    private string relayJoinCode;
+
+    public GameObject lobbyButtons;
+    public GameObject startGameButton;
     //public Button[] joinButtons;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -64,6 +71,12 @@ public class LobbySystem : MonoBehaviour
             }
             Lobby createdLobby = await CreateLobbyTask(lobbyNameInput.text);
             currentLobby = createdLobby;
+            print(relayJoinCode);
+            
+            lobbyButtons.SetActive(false);
+            startGameButton.SetActive(true);
+            
+            loadingScreen.SetActive(false);
             QueryForLobbies();
         }
     }
@@ -76,14 +89,26 @@ public class LobbySystem : MonoBehaviour
 
         options.IsPrivate = privateToggle.isOn;
         options.IsLocked = false;
+        
+        string lobbyCode = await relayManager.StartHostWithRelay(4, "udp");
+        relayJoinCode = lobbyCode;
+        options.Data = new Dictionary<string, DataObject>()
+        {
+            {
+                "LobbyCode", new DataObject(
+                    visibility: DataObject.VisibilityOptions.Public,
+                    value: lobbyCode)
+            },
+        };
+        
         var lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
 
         StartCoroutine(HeartbeatLobbyCoroutine(lobby.Id, 15));
-        loadingScreen.SetActive(false);
         print("created lobby, private: " + privateToggle.isOn);
         return lobby;
     }
 
+    /*
     public async void JoinLobbyCode()
     {
         if (lobbyCodeInput.text != "")
@@ -105,7 +130,7 @@ public class LobbySystem : MonoBehaviour
                 loadingScreen.SetActive(false);
             }
         }
-    }
+    }*/
 
     public async void JoinLobbyId(string lobbyId)
     {
@@ -118,6 +143,16 @@ public class LobbySystem : MonoBehaviour
             loadingScreen.SetActive(true);
             Lobby joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId);
             currentLobby = joinedLobby;
+
+            relayJoinCode = currentLobby.Data["LobbyCode"].Value;
+
+            print(relayJoinCode);
+            relayManager.joinCode = relayJoinCode;
+            relayManager.StartClientWithJoinCode();
+            
+            
+            lobbyButtons.SetActive(false);
+            
             loadingScreen.SetActive(false);
         }
         catch (LobbyServiceException e)
@@ -232,6 +267,15 @@ public class LobbySystem : MonoBehaviour
         {
             Debug.Log(e);
         }
+    }
+
+    public void StartGame()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
+        
+        FindFirstObjectByType<Eye>().started.Value = true;
     }
 
 }

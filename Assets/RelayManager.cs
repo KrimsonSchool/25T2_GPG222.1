@@ -10,7 +10,8 @@ using UnityEngine;
 
 public class RelayManager : MonoBehaviour
 {
-    private string joinCode;
+    [HideInInspector]
+    public string joinCode;
     public TMP_InputField joinCodeInput;
     
     public TextMeshProUGUI lobbyCodeText;
@@ -21,11 +22,6 @@ public class RelayManager : MonoBehaviour
     void Start()
     {
         
-    }
-
-    public void ClientUpdatedJoinCode()
-    {
-        joinCode = joinCodeInput.text;
     }
 
     public void InitialiseHostWithRelay()
@@ -45,16 +41,16 @@ public class RelayManager : MonoBehaviour
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, connectionType));
         var joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
         
-        lobbyCodeText.text = "Lobby Code: " + joinCode;
-        lobbyUI.SetActive(false);
-        gameStartButton.SetActive(true);
+        //lobbyCodeText.text = "Lobby Code: " + joinCode;
+        //lobbyUI.SetActive(false);
+        //gameStartButton.SetActive(true);
         
         return NetworkManager.Singleton.StartHost() ? joinCode : null;
     }
 
     public void StartClientWithJoinCode()
     {
-        ClientUpdatedJoinCode();
+        //ClientUpdatedJoinCode();
         if (joinCode != "")
         {
             connectingBuffer.SetActive(true);
@@ -77,8 +73,8 @@ public class RelayManager : MonoBehaviour
         var allocation = await RelayService.Instance.JoinAllocationAsync(joinCode: joinCode);
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, connectionType));
         
-        lobbyCodeText.text = "Lobby Code: " + joinCode;
-        lobbyUI.SetActive(false);
+        //lobbyCodeText.text = "Lobby Code: " + joinCode;
+        //lobbyUI.SetActive(false);
         
         return !string.IsNullOrEmpty(joinCode) && NetworkManager.Singleton.StartClient();
     }
